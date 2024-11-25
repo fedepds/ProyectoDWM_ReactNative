@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useToken } from "@/context/TokenContext";
 import { useRouter } from "expo-router";
+import { postSignIn } from "@/services/api";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -20,17 +21,17 @@ export default function Register() {
   const { saveToken, saveUserData } = useToken();
   const router = useRouter();
 
-  const postSignIn = async (username, email, password) => {
-    const response = await fetch("http://10.166.0.136:3001/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password }),
-    });
-    if (!response.ok) {
-      throw new Error("Error al crear el usuario");
-    }
-    return response.json();
-  };
+//   const postSignIn = async (username, email, password) => {
+//     const response = await fetch("http://10.166.0.136:3001/api/auth/register", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ username, email, password }),
+//     });
+//     if (!response.ok) {
+//       throw new Error("Error al crear el usuario");
+//     }
+//     return response.json();
+//   };
 
   const handleSubmit = async () => {
     try {
