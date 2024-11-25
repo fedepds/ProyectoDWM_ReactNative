@@ -10,20 +10,14 @@ import {
 import PostCard from "@/components/PostCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFeed, likePost, removeLike } from "@/services/postServices";
+import { useToken } from "@/context/TokenContext";
 
 const Feed = () => {
+  const { token, userData} = useToken();
   const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await AsyncStorage.getItem("userData");
-      if (userData.ok) {
-        setUserId(userData._id);
-      }
-    };
-    fetchUserData();
-  }, []);
+
 
   const fetchAllUsers = async () => {
     console.log(userData);

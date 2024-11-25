@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const localhost = `10.166.0.136`;
+import { useToken } from "@/context/TokenContext";
+const localhost = ` 10.13.164.202`;
 
 export const postLogin = async (email, password) => {
   const request = await fetch(`http://${localhost}:3001/api/auth/login`, {
@@ -29,7 +29,7 @@ export const postSingin = async (username, email, password) => {
 //Al hacer la request hay que mandarle el Token JWT en los headers para que te autorice y te envíe la información
 
 export const getProfileId = async (id) => {
-    const token = await AsyncStorage.getItem("token");
+   const token = await AsyncStorage.getItem("token");
   try {
     const response = await fetch(
       `http://${localhost}:3001/api/user/profile/${id}`,
@@ -52,7 +52,7 @@ export const getProfileId = async (id) => {
 };
 
 export const getFeed = async () => {
-    const token = await AsyncStorage.getItem("token");
+  const token = await AsyncStorage.getItem("token");
   try {
     const request = await fetch(`http://${localhost}:3001/api/posts/feed`, {
       method: "GET",
@@ -75,7 +75,7 @@ export const getFeed = async () => {
   }
 };
 export const likePost = async (postId) => {
-    const token = await AsyncStorage.getItem("token");
+  const token = await AsyncStorage.getItem("token");
   try {
     const response = await fetch(
       `http://${localhost}:3001/api/posts/${postId}/like`,
@@ -101,7 +101,7 @@ export const likePost = async (postId) => {
   }
 };
 export const removeLike = async (postId) => {
-    const token = await AsyncStorage.getItem("token");
+  const token = await AsyncStorage.getItem("token");
   try {
     const response = await fetch(
       `http://${localhost}/api/posts/${postId}/like`,
@@ -129,7 +129,7 @@ export const removeLike = async (postId) => {
 
 // Crear un nuevo comentario
 export const createComment = async (postId, content) => {
-    const token = await AsyncStorage.getItem("token");
+  const token = await AsyncStorage.getItem("token");
   try {
     const response = await fetch(
       `http://${localhost}:3001/api/posts/${postId}/comments`,
@@ -156,7 +156,7 @@ export const createComment = async (postId, content) => {
 
 // Obtener un comentario específico
 export const getComment = async (commentId) => {
-    const token = await AsyncStorage.getItem("token");
+  const token = await AsyncStorage.getItem("token");
   try {
     const response = await fetch(
       `http://${localhost}:3001/api/posts/comments/${commentId}`,
