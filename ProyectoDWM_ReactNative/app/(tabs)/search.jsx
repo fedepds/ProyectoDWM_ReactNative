@@ -12,26 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useToken } from "@/context/TokenContext";
 import { useRouter } from "expo-router";
-
-const getAllUsers = async () => {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    const response = await fetch("http://10.166.0.136:3001/api/user/all", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+import { getAllUsers } from "@/services/api";
 
 const Search = () => {
   const [users, setUsers] = useState([]);

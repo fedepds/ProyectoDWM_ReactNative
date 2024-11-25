@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 import { useToken } from "@/context/TokenContext";
 import { router } from "expo-router";
 import { useRouter } from "expo-router";
+import { postLogin } from "@/services/api";
 
 const Login = () => {
   const [password, setPassword] = useState("");
@@ -11,34 +12,17 @@ const Login = () => {
   const { saveToken, saveUserData } = useToken();
   const router = useRouter();
 
-  const postLogin = async () => {
-    const request = await fetch("http://10.166.0.136:3001/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!request.ok) {
-      throw new Error("Credenciales Incorrectas");
+  const handleSubmit = async () => {
+    try {
+      const data = await postLogin(email, password);
+      console.log(data);
+      saveToken(data.token);
+      saveUserData(data);
+      router.push("/(tabs)");
+    } catch (error) {
+      setErrorMessage("Credenciales Incorrectas, Intente nuevamente");
     }
-
-    const data = await request.json();
-    saveToken(data.token);
-    saveUserData(data);
-    console.log(data);
-    router.push("/(tabs)");
   };
-
-//   const handleSubmit = async () => {
-//     try {
-//       const data = await postLogin(email, password);
-//       saveToken(data.token);
-//       saveUserData(data.userData);
-//     //   navigation.navigate("Feed");
-//     } catch (error) {
-//       setErrorMessage("Credenciales Incorrectas, Intente nuevamente");
-//     }
-//   };
 
   return (
     <View style={styles.container}>
@@ -58,7 +42,7 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button} onPress={postLogin}>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
       <Text style={styles.loginText}>
