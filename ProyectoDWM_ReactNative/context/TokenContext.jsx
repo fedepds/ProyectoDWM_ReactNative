@@ -7,18 +7,15 @@ export const useToken = () => useContext(TokenContext);
 
 export const TokenProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const loadTokenAndUserData = async () => {
       const storedToken = await AsyncStorage.getItem("token");
-      const storedUserId = await AsyncStorage.getItem("userId");
-      const storedUsername = await AsyncStorage.getItem("username");
+      const storedUserData = await AsyncStorage.getItem("userData");
 
       setToken(storedToken);
-      setUserId(storedUserId);
-      setUsername(storedUsername);
+      setUserData(storedUserData ? JSON.parse(storedUserData) : null);
     };
 
     loadTokenAndUserData();
@@ -29,15 +26,13 @@ export const TokenProvider = ({ children }) => {
     setToken(newToken);
   };
 
-  const saveUserData = async (newUserId, newUsername) => {
-    await AsyncStorage.setItem("userId", newUserId);
-    await AsyncStorage.setItem("username", newUsername);
-    setUserId(newUserId);
-    setUsername(newUsername);
+  const saveUserData = async (newUserData) => {
+    await AsyncStorage.setItem("userData", JSON.stringify(newUserData));
+    setUserData(newUserData);
   };
 
   return (
-    <TokenContext.Provider value={{ token, userId, username, saveToken, saveUserData }}>
+    <TokenContext.Provider value={{ token, saveToken, userData, saveUserData }}>
       {children}
     </TokenContext.Provider>
   );

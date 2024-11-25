@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { useToken } from "../../context/TokenContext"; // Importar el hook
-import { useNavigation } from "@react-navigation/native"; // Navegación
+import { useToken } from "@/context/TokenContext";
+import { router } from "expo-router";
 
 const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { saveToken, saveUserData } = useToken(); // Usar el contexto
-  const navigation = useNavigation();
+  const { saveToken, saveUserData } = useToken();
 
-  const postLogin = async (email, password) => {
+  const postLogin = async () => {
     const request = await fetch("http://10.166.0.136:3001/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -22,20 +21,21 @@ const Login = () => {
     }
 
     const data = await request.json();
-    return data;
+    saveToken(data.token);
+    saveUserData(data);
+    router.push("/(tabs)");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await postLogin(email, password);
-      saveToken(data.token);
-      saveUserData(data._id, data.username); // Guarda el token, ID y username
-    //   navigation.navigate("Feed");
-    } catch (error) {
-      setErrorMessage("Credenciales Incorrectas, Intente nuevamente");
-    }
-  };
+//   const handleSubmit = async () => {
+//     try {
+//       const data = await postLogin(email, password);
+//       saveToken(data.token);
+//       saveUserData(data.userData);
+//     //   navigation.navigate("Feed");
+//     } catch (error) {
+//       setErrorMessage("Credenciales Incorrectas, Intente nuevamente");
+//     }
+//   };
 
   return (
     <View style={styles.container}>
@@ -53,7 +53,7 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      <TouchableOpacity style={styles.button} onPress={postLogin}>
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
       {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
