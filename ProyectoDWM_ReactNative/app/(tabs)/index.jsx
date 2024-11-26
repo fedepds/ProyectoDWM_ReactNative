@@ -9,21 +9,14 @@ import {
 } from "react-native";
 import PostCard from "@/components/PostCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getFeed, likePost, removeLike } from "@/services/postServices";
+import { getFeed, likePost, removeLike, getAllUsers } from "@/services/postServices";
+import { useToken } from "@/context/TokenContext";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
-  const [userId, setUserId] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await AsyncStorage.getItem("userData");
-      if (userData.ok) {
-        setUserId(userData._id);
-      }
-    };
-    fetchUserData();
-  }, []);
+  const {userData} = useToken();
+  const [user, setUsers] = useState([]);
+  const userId = userData._id;
 
   const fetchAllUsers = async () => {
     console.log(userData);
@@ -49,28 +42,6 @@ const Feed = () => {
     fetchAllUsers();
   }, []);
 
-  const handleLikePost = async () => {
-    console.log(post);
-    try {
-      let updatedPost;
-      if (post.likes.includes(userData._id)) {
-        updatedPost = await removeLike(post._id);
-      } else {
-        updatedPost = await likePost(post._id);
-      }
-
-      updatedPost.comments = post.comments; // Mantener los comentarios intactos
-
-      setPosts((prevPosts) =>
-        prevPosts.map((p) =>
-          p._id === updatedPost._id ? { ...p, likes: updatedPost.likes } : p
-        )
-      );
-    } catch (error) {
-      console.error("Error al dar o quitar like:", error);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -80,7 +51,6 @@ const Feed = () => {
           <PostCard
             post={item}
             setPosts={setPosts}
-            //handleLikePost={handleLikePost}
           />
         )}
         contentContainerStyle={styles.postsContainer}
