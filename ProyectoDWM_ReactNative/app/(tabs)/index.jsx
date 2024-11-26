@@ -11,10 +11,11 @@ import PostCard from "@/components/PostCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFeed, likePost, removeLike, getAllUsers } from "@/services/postServices";
 import { useToken } from "@/context/TokenContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
-  const {userData} = useToken();
+  const { userData } = useToken();
   const [user, setUsers] = useState([]);
   const userId = userData._id;
 
@@ -43,26 +44,31 @@ const Feed = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={posts}
-        keyExtractor={(post) => post._id}
-        renderItem={({ item }) => (
-          <PostCard
-            post={item}
-            setPosts={setPosts}
-          />
-        )}
-        contentContainerStyle={styles.postsContainer}
-        ListEmptyComponent={() => <Text>No hay publicaciones disponibles</Text>}
-      />
-    </View>
+    <SafeAreaView style={styles.area}>
+      <View style={styles.container}>
+        <FlatList
+          data={posts}
+          keyExtractor={(post) => post._id}
+          renderItem={({ item }) => (
+            <PostCard
+              post={item}
+              setPosts={setPosts}
+            />
+          )}
+          contentContainerStyle={styles.postsContainer}
+          ListEmptyComponent={() => <Text>No hay publicaciones disponibles</Text>}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default Feed;
 
 const styles = StyleSheet.create({
+  area: {
+    flex: 1
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
