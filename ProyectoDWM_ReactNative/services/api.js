@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const localhost = `10.13.164.202`;
+const localhost = `10.166.0.136`;
 
 export const postLogin = async (email, password) => {
   const request = await fetch(`http://${localhost}:3001/api/auth/login`, {
@@ -104,7 +104,7 @@ export const removeLike = async (postId) => {
     const token = await AsyncStorage.getItem("token");
   try {
     const response = await fetch(
-      `http://${localhost}/api/posts/${postId}/like`,
+      `http://${localhost}:3001/api/posts/${postId}/like`,
       {
         method: "DELETE",
         headers: {

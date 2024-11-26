@@ -5,7 +5,7 @@ import { useToken } from "@/context/TokenContext";
 import { useRouter } from "expo-router";
 import { likePost, removeLike, createComment,removeComment } from "@/services/api";
 
-const localhost = `10.13.164.202`;
+const localhost = `10.166.0.136`;
 
 const PostCard = ({ post, setPosts }) => {
   const {userData} = useToken();
@@ -103,7 +103,7 @@ const PostCard = ({ post, setPosts }) => {
 
         <TouchableOpacity style={styles.postCardLikeIcon} onPress={handleLikePost}>
           <Text style={styles.likeButtonText}>
-            {post.likes.includes(userData._id) ? 'Quitar Like' : 'Like'}
+            {post.likes.includes(userData._id) ? 'Dislike' : 'Like'}
             
           </Text>
         </TouchableOpacity>

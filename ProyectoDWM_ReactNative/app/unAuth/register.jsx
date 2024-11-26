@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useToken } from "@/context/TokenContext";
 import { useRouter } from "expo-router";
-import { postSignIn } from "@/services/api";
+import { postSingin } from "@/services/api";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -21,23 +21,12 @@ export default function Register() {
   const { saveToken, saveUserData } = useToken();
   const router = useRouter();
 
-//   const postSignIn = async (username, email, password) => {
-//     const response = await fetch("http://10.166.0.136:3001/api/auth/register", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ username, email, password }),
-//     });
-//     if (!response.ok) {
-//       throw new Error("Error al crear el usuario");
-//     }
-//     return response.json();
-//   };
-
   const handleSubmit = async () => {
     try {
-      const data = await postSignIn(username, email, password);
-      await saveToken(data.token);
-      await saveUserData(data);
+      const data = await postSingin(username, email, password);
+      saveUserData(data);
+      saveToken(data.token);
+      router.push("/(tabs)");
       Alert.alert("Registro exitoso", "Usuario creado correctamente");
     } catch (error) {
       setErrorMessage("Error al crear el usuario, Intente nuevamente");
@@ -54,7 +43,8 @@ export default function Register() {
             placeholder="Username"
             placeholderTextColor="#000"
             value={username}
-            onChangeText={setUsername}
+            onChangeText={(text) => setUsername(text)}
+            required
           />
           <TextInput
             style={styles.inputField}
@@ -62,7 +52,8 @@ export default function Register() {
             placeholderTextColor="#000"
             value={email}
             keyboardType="email-address"
-            onChangeText={setEmail}
+            onChangeText={(text) => setEmail(text)}
+            required
           />
           <TextInput
             style={styles.inputField}
@@ -70,7 +61,8 @@ export default function Register() {
             placeholderTextColor="#000"
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text)}
+            required
           />
           <TouchableOpacity
             style={styles.registerButton}
