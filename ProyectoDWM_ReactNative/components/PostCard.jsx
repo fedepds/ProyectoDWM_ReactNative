@@ -5,19 +5,10 @@ import { useToken } from "@/context/TokenContext";
 import { useRouter } from "expo-router";
 import { likePost, removeLike, createComment,removeComment } from "@/services/api";
 
-const localhost = `10.166.0.136`;
+const localhost = `10.13.164.202`;
 
 const PostCard = ({ post, setPosts }) => {
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const data = await AsyncStorage.getItem("userData");
-      setUserData(data);
-    };
-
-    fetchUserData();
-  }, []);
+  const {userData} = useToken();
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
 
